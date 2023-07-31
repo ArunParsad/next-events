@@ -1,33 +1,41 @@
 import React, { useRef } from "react";
 import Container from "@/components/Container";
 import EventList from "@/components/EventList";
-import { getFeaturedEvents } from "@/dummy-data";
 import SubmitButton from "@/components/SubmitButton";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { getFeaturedEvents } from "@/helpers/api-utils";
 
+const index = (props) => {
+  const router = useRouter();
+  const selectedMonth = useRef("");
+  const selectedYear = useRef("");
 
-const index = () => {
-  const router = useRouter()
-  const selectedMonth = useRef('')
-  const selectedYear = useRef('')
-
-  const featuredEvents = getFeaturedEvents();
+  const featuredEvents = props.featuredEvents;
   const onSubmitHandelar = (e) => {
-    const path = `${selectedYear.current.value}/${selectedMonth.current.value}`
-    router.push(path)
-    e.preventDefault()
-  }
+    const path = `${selectedYear.current.value}/${selectedMonth.current.value}`;
+    router.push(path);
+    e.preventDefault();
+  };
   return (
     <Container>
       <h2 className="text-3xl font-bold mt-10 text-center">Featured Events</h2>
-      <form className="flex justify-center items-center mt-10 space-x-5" onSubmit={onSubmitHandelar}>
-        <select className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none" ref={selectedYear}>
+      <form
+        className="flex justify-center items-center mt-10 space-x-5"
+        onSubmit={onSubmitHandelar}
+      >
+        <select
+          className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none"
+          ref={selectedYear}
+        >
           <option value="">Years</option>
           <option value="2021">2021</option>
           <option value="2022">2022</option>
         </select>
-        <select className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none" ref={selectedMonth}>
+        <select
+          className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none"
+          ref={selectedMonth}
+        >
           <option value="">Months</option>
           <option value="01">January</option>
           <option value="02">February</option>
@@ -55,6 +63,11 @@ const index = () => {
       </section>
     </Container>
   );
+};
+
+export const getStaticProps = async () => {
+  const events = await getFeaturedEvents();
+  return { props: { featuredEvents: events } };
 };
 
 export default index;
