@@ -1,31 +1,43 @@
-import React from "react";
+import React, { useRef } from "react";
 import Container from "@/components/Container";
 import EventList from "@/components/EventList";
 import { getFeaturedEvents } from "@/dummy-data";
 import SubmitButton from "@/components/SubmitButton";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
+
 const index = () => {
+  const router = useRouter()
+  const selectedMonth = useRef('')
+  const selectedYear = useRef('')
+
   const featuredEvents = getFeaturedEvents();
+  const onSubmitHandelar = (e) => {
+    const path = `${selectedYear.current.value}/${selectedMonth.current.value}`
+    router.push(path)
+    e.preventDefault()
+  }
   return (
     <Container>
       <h2 className="text-3xl font-bold mt-10 text-center">Featured Events</h2>
-      <form className="flex justify-center items-center mt-10 space-x-5">
-        <select className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+      <form className="flex justify-center items-center mt-10 space-x-5" onSubmit={onSubmitHandelar}>
+        <select className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none" ref={selectedYear}>
           <option value="">Years</option>
           <option value="2021">2021</option>
           <option value="2022">2022</option>
         </select>
-        <select className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+        <select className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none" ref={selectedMonth}>
           <option value="">Months</option>
-          <option value="1">January</option>
-          <option value="2">February</option>
-          <option value="3">March</option>
-          <option value="4">April</option>
-          <option value="5">May</option>
-          <option value="6">June</option>
-          <option value="7">July</option>
-          <option value="8">August</option>
-          <option value="9">September</option>
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
           <option value="10">October</option>
           <option value="11">November</option>
           <option value="12">December</option>
