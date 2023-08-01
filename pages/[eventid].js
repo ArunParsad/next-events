@@ -1,11 +1,10 @@
 import Container from "@/components/Container";
-import { getEventById } from "@/dummy-data";
-import { useRouter } from "next/router";
 import { HiMapPin, HiCalendar } from "react-icons/hi2";
-const EventDetailPage = () => {
-  const router = useRouter();
-  const eventId = router.query.eventid;
-  const event = getEventById(eventId);
+import { getFeaturedEvents, getEventById } from "@/helpers/api-utils";
+
+const EventDetailPage = (props) => {
+  const event = props.event;
+
   const formatedDate = new Date(event?.date).toLocaleDateString("eng-us", {
     day: "numeric",
     month: "long",
@@ -56,3 +55,23 @@ const EventDetailPage = () => {
 };
 
 export default EventDetailPage;
+
+export const getStaticProps = async (context) => {
+  const eventid = context.params.eventid;
+  const event = await getEventById(eventid);
+  return {
+    props: {
+      event: event,
+    },
+    revalidate: 300,
+  };
+};
+
+export const getStaticPaths = async (context) => {
+  const events = await getFeaturedEvents();
+  const paths = events.map((event) => ({ params: { eventid: event.id } }));
+  return {
+    paths: paths,
+    fallback: true,
+  };
+};

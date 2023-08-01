@@ -67,7 +67,7 @@ const index = (props) => {
 
 export const getStaticProps = async () => {
   const events = await getFeaturedEvents();
-  return { props: { featuredEvents: events } };
+  return { props: { featuredEvents: events }, revalidate: 1800 };
 };
 
 export default index;

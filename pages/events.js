@@ -1,11 +1,9 @@
 import React from "react";
-import { getAllEvents } from "@/dummy-data";
+import { getAllEvents } from "@/helpers/api-utils";
 import EventList from "@/components/EventList";
 import Link from "next/link";
 import Container from "@/components/Container";
-const events = () => {
-  const allEvents = getAllEvents();
-
+const events = ({ allEvents }) => {
   return (
     <Container>
       <section className="mt-10 flex flex-col justify-center items-center space-y-5">
@@ -22,3 +20,13 @@ const events = () => {
 };
 
 export default events;
+
+export const getStaticProps = async () => {
+  const events = await getAllEvents();
+  return {
+    props: {
+      allEvents: events,
+    },
+    revalidate: 300,
+  };
+};
